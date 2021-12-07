@@ -10,7 +10,7 @@ def home():
     return render_template('index.html')
 
 @login.user_loader
-def load_user(user_id):
+def load_user(user):
     pass
 
 

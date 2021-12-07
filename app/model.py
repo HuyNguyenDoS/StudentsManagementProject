@@ -24,36 +24,31 @@ class User(db.Model, UserMixin):
     user_role = Column(Enum(UserRole), default=UserRole.EMPLOYEE)
 
     def __str__(self):
-        return self.name
+        return self.username
 
 class KyHoc(db.Model):
     IDKyHoc = Column(Integer, primary_key=True, nullable=False)
 
     IDLop = relationship('Lop', backref='kyhoc', lazy=True)
 
-    def __str__(self):
-        return self.name
-
 class Lop(db.Model):
     __tablename__ = 'lop'
 
     IDLop = Column(CHAR(15), primary_key=True, nullable=False, unique=True)
-    TenLop = Column(CHAR(15), nullable=False, unique=True)
+    TenLop = Column(String(15), nullable=False, unique=True)
     SiSo = Column(Integer)
 
     IDHocSinh = relationship('HocSinh', backref='lop', lazy=True)
 
     IDKyHoc = Column(ForeignKey(KyHoc.IDKyHoc))
 
-    def __str__(self):
-        return self.name
 
 class MonHoc(db.Model):
     MaMH = Column(CHAR(10), primary_key=True, unique=True)
-    TenMH = Column(CHAR(30), nullable=False)
+    TenMH = Column(String(30), nullable=False)
 
     def __str__(self):
-        return self.name
+        return self.TenMH
 
 class HocSinh(db.Model):
     IDHocSinh = Column(CHAR(15), primary_key=True, nullable=False, unique=True)
