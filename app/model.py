@@ -13,7 +13,8 @@ class UserRole(UserEnum):
     STUDENT = 4
 
 class User(db.Model, UserMixin):
-    IDUser = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
     email = Column(String(50))
@@ -24,7 +25,7 @@ class User(db.Model, UserMixin):
     user_role = Column(Enum(UserRole), default=UserRole.EMPLOYEE)
 
     def __str__(self):
-        return self.username
+        return self.name
 
 class KyHoc(db.Model):
     IDKyHoc = Column(Integer, primary_key=True, nullable=False)
@@ -94,6 +95,7 @@ class NhanVien(db.Model):
     gender = Column(Boolean, nullable=False)
     note = Column(String(100))
 
+
     def __str__(self):
         return self.name
 
@@ -109,6 +111,7 @@ class GiaoVien(db.Model):
 
     def __str__(self):
         return self.name
+
 
 if __name__=='__main__':
     db.create_all()
