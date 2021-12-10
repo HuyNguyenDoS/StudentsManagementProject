@@ -1,7 +1,7 @@
 from flask_admin import BaseView, expose, AdminIndexView, Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_login import logout_user, current_user
-from flask import redirect
+from flask import redirect, request
 from app import db, app, utils
 from app.model import Lop, HocSinh, Diem, MonHoc, UserRole, User
 from datetime import datetime
@@ -25,11 +25,19 @@ class MyAdminIndex(AdminIndexView):
     def index(self):
 
         return self.render('admin/index.html',
-                           stats=utils.general_stats(),
                            hocsinh_stats=utils.hocsinh_stats(),
                            giaovien_stats=utils.giaovien_stats(),
                            lop_stats=utils.lop_stats(),
                            nhanvien_stats=utils.nhanvien_stats())
+
+class StatsViewDiem(BaseView):
+    @expose('/')
+    def index(self):
+        kw = request.args.get('kw')
+        return self.render('admin/lop_stats.html',
+                           kw=kw,
+                           stats=utils.general_stats(),
+                           diemtb=utils.DiemTB())
 
 
 admin = Admin(app=app, name="QuanLyHocSinh", template_mode="bootstrap4", index_view=MyAdminIndex())
@@ -38,4 +46,5 @@ admin = Admin(app=app, name="QuanLyHocSinh", template_mode="bootstrap4", index_v
 admin.add_view(AuthenticatedModelView(HocSinh, db.session, name='Toàn Học Sinh'))
 admin.add_view(AuthenticatedModelView(Lop, db.session, name='Lớp'))
 admin.add_view(AuthenticatedModelView(User, db.session, name='User'))
+admin.add_view(StatsViewDiem(name='Stats Diem'))
 admin.add_view(LogoutView(name='Logout'))

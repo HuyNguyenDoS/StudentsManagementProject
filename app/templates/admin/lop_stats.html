@@ -1,51 +1,160 @@
-<div style="margin-top:100px; width:500px; height:500px;">
-        <canvas id="myChart"></canvas>
+{% extends 'admin/base.html' %}
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-        let data =[]
+{% block body %}
+<h1 class="text-center text-info" style="margin: 25px">THONG KE DIEM TRUNG BINH</h1>
 
-        {% for s in stats %}
-            data.push({{ s[2] }})
-        {% endfor %}
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        <table class="table">
+            <tr>
+                <th>Lớp</th>
+                <th>Số lượng học sinh</th>
+                <th>Kì học</th>
+            </tr>
+            {% for s in stats %}
+            <tr>
+                <td>{{ s[1] }}</td>
+                <td>{{ s[2] }}</td>
+                <td>{{ s[0] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-6 col-xs-12">
+        <div>
+            <canvas id="myChart"></canvas>
 
-        window.onload =function()
-        {
-            const ctx = document.getElementById('myChart');
-            const myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Lớp', 'Hoc Sinh'],
-                datasets: [{
-                    label: 'Thống kê chung của trường',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+            let data =[]
+            let labels=[]
+
+            {% for s in stats %}
+                labels.push('{{ s[1] }}')
+                data.push({{ s[2] }})
+            {% endfor %}
+
+            window.onload =function()
+            {
+                const ctx = document.getElementById('myChart');
+                const myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Thống kê chung của trường',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
+            });
             }
-        });
-        }
-    </script>
+        </script>
+        </div>
     </div>
+</div>
+
+<!--thống kê điểm trung bình của từng học sinh theo lớp-->
+
+<!--test-->
+<div class="col-md-6 col-xs-12">
+        <table class="table">
+            <tr>
+                <th>Tên Lop</th>
+                <th>Ten Hoc Sinh</th>
+                <th>Điểm trung bình</th>
+            </tr>
+            {% for d in diemtb %}
+            <tr>
+                <td>{{ d[1] }}</td>
+                <td>{{ d[2] }}</td>
+                <td>{{ d[3] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+</div>
+<div>
+    <form action="/admin/StatsViewDiem/">
+            <div class="form-group">
+                <input type="text" class="form-control" name="kw" placeholder="Nhap ten lop muon thong ke..." />
+            </div>
+            <input type="submit" value="Thong ke" class="btn btn-success" />
+        </form>
+        <div>
+            <canvas id="myChartDiem"></canvas>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                let labels = []
+                let data = []
+
+                {% for d in diemtb %}
+                labels.push('{{ d[1] }}')
+                data.push({{ d[2] }})
+                {% endfor %}
+
+                const ctx = document.getElementById('myChartDiem').getContext('2d');
+                const myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                        datasets: [{
+                            label: label,
+                            data: data,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+
+</div>
+
+
+{% endblock %}
