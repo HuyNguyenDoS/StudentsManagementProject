@@ -1,0 +1,31 @@
+{% extends 'layout/base.html' %}
+
+{% block title %} Trang chu {% endblock %}
+
+{% block header %}
+    <nav class="navbar navbar-expand-md">
+
+
+      <!-- Navbar links -->
+      <div class="collapse navbar-collapse mgl-5" id="collapsibleNavbar">
+            <a class="" href="#">OU SCHOOL</a>
+      </div>
+
+      <form class="form-inline">
+        <button class="btn btn-home" type="submit">Home</button>
+        <button class="btn btn-home" type="submit">Them Hoc Sinh</button>
+        <button class="btn btn-success border" type="submit" href="{{ url_for('nhanvien_logout') }}">Logout</button>
+      </form>
+    </nav>
+{% endblock %}
+
+{% block content %}
+ <div>
+     <img class="width-100" src="{{ url_for('static', filename='images/student_banner.png') }}" alt="banner">
+     <span class="banner-text">Learning Today, Leading Tomorrow</span>
+ </div>
+
+<br><br>
+
+
+{% endblock %}

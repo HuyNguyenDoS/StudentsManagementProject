@@ -1,38 +1,51 @@
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-  <!-- Brand -->
-    <img src="{{ url_for('static', filename='images/iphone11.png') }}" alt="Logo" style="width:40px;">
+<nav class="navbar navbar-expand-md">
 
-  <!-- Toggler/collapsibe Button -->
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
-  </button>
 
   <!-- Navbar links -->
-  <div class="collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="/">Trang chu</a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link text-success" href="#">Dang xuat</a>
-      </li>
-      {% else %}
-      <li class="nav-item">
-        <a class="nav-link text-danger" href="#">Dang ky</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-success" href="#">Dang nhap</a>
-      </li>
-      {% endif %}
-      <li class="nav-item">
-        <a class="nav-link text-success" href="#">Gio hang <span class="badge-info" id="cartCounter">0</span> </a>
-      </li>
-    </ul>
+  <div class="collapse navbar-collapse mgl-5" id="collapsibleNavbar">
+        <a class="" href="#">OU SCHOOL</a>
   </div>
-
-  <form class="form-inline">
-    <input class="form-control mr-sm-2" name="keyword" type="text" placeholder="Search">
-    <button class="btn btn-success" type="submit">Search</button>
-  </form>
+    <button class="btn btn-home js-login" type="submit">Home</button>
+    <button class="btn btn-success border js-login mgr-5" onclick="ShowLogin()" type="submit">Login</button>
 </nav>
+
+ <div class="modal js-modal">
+    <div class="modal-container">
+        <div class="modal-close js-modal-close" onclick="HideLogin()">
+            <i class="fa fa-close"></i>
+        </div>
+        <header class="modal-header">
+            <h2>Login</h2>
+        </header>
+        <div class="modal-body">
+            <form method="post" class="was-validated" action="{{ url_for('nhanvien_login') }}">
+                  <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                  </div>
+                  <div class="form-group">
+                        <label for="pass">Password:</label>
+                        <input type="password" class="form-control" id="pass" name="password" required>
+                  </div>
+                  <input type="submit" value="Login" class="btn btn-danger">
+            </form>
+        </div>
+    </div>
+ </div>
+
+<script>
+    function ShowLogin() {
+        modal.classList.add('open')
+    }
+
+    function HideLogin() {
+        modal.classList.remove('open')
+    }
+    const loginBtn = document.querySelectorAll('.js-login')
+    const modal = document.querySelector('.js-modal')
+    const modalClose = document.querySelector('.js-modal-close')
+
+    loginBtn.addEventListener("click", ShowLogin)
+
+
+</script>>
