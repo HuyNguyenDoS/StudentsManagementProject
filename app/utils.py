@@ -6,7 +6,7 @@ from sqlalchemy.sql import extract
 import hashlib
 
 def general_stats():
-    return db.session.query(Lop.IDKyHoc, Lop.TenLop, func.count(HocSinh.IDHocSinh))\
+    return db.session.query(Lop.IDLop, Lop.TenLop, func.count(HocSinh.IDHocSinh))\
                       .join(HocSinh, Lop.IDLop.__eq__(HocSinh.IDLop), isouter=True)\
                       .group_by(Lop.IDLop, Lop.TenLop).all()
 

@@ -46,5 +46,6 @@ admin = Admin(app=app, name="QuanLyHocSinh", template_mode="bootstrap4", index_v
 admin.add_view(AuthenticatedModelView(HocSinh, db.session, name='Toàn Học Sinh'))
 admin.add_view(AuthenticatedModelView(Lop, db.session, name='Lớp'))
 admin.add_view(AuthenticatedModelView(User, db.session, name='User'))
+# admin.add_view(AuthenticatedModelView(Diem, db.session, name='Diem'))
 admin.add_view(StatsViewDiem(name='Stats Diem'))
 admin.add_view(LogoutView(name='Logout'))

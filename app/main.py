@@ -30,7 +30,7 @@ def nhanvien_login():
         except Exception as ex:
             error_msg = str(ex)
 
-    return render_template('index.html', error_msg=error_msg)
+    return render_template('employee.html', error_msg=error_msg)
 
 # Login method for admin, page admin
 @app.route('/admin-login', methods=['post'])
