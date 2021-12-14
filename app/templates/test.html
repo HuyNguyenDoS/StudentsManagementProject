@@ -1,25 +1,5 @@
-{% extends 'layout/base.html' %}
 
-{% block title %} Trang chu {% endblock %}
-
-{% block header %}
-    <nav class="navbar navbar-expand-md">
-
-
-      <!-- Navbar links -->
-      <div class="collapse navbar-collapse mgl-5" id="collapsibleNavbar">
-            <a class="" href="#">OU SCHOOL</a>
-      </div>
-
-      <button class="btn btn-home" onclick="Show()" type="submit">Thêm Tài Khoản</button>
-      <div class="form-inline">
-        <button class="btn btn-home" type="submit">Home</button>
-
-        <button class="btn btn-success border" type="submit" href="{{ url_for('nhanvien_logout') }}">Logout</button>
-      </div>
-    </nav>
-
-<div class="modal js-modal">
+<div class="modal js-modal" style="margin-top: -100px">
     <div class="modal-container">
         <div class="modal-close js-modal-close" onclick="Hide()">
             <i class="fa fa-close"></i>
@@ -99,16 +79,4 @@
     loginBtn.addEventListener("click", ShowLogin)
 
 
-</script>>
-{% endblock %}
-
-{% block content %}
- <div>
-     <img class="width-100" src="{{ url_for('static', filename='images/student_banner.png') }}" alt="banner">
-     <span class="banner-text">Learning Today, Leading Tomorrow</span>
- </div>
-
-<br><br>
-
-
-{% endblock %}
+</script>

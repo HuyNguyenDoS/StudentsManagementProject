@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
+    birthday = Column(DateTime, nullable=False)
     email = Column(String(50))
     active = Column(Boolean, default=True)
     joined_date = Column(DateTime, default=datetime.now())
@@ -210,6 +211,6 @@ if __name__=='__main__':
     # db.session.add(d1)
     # db.session.commit()
 
-    admin = User(name='admin', username='admin', password='21232f297a57a5a743894a0e4a801fc3', user_role='ADMIN')
+    admin = User(name='admin', username='admin', password='21232f297a57a5a743894a0e4a801fc3', birthday='2001-11-20 00:00:00' ,user_role='ADMIN')
     db.session.add(admin)
     db.session.commit()
