@@ -1,37 +1,129 @@
 {% extends 'admin/base.html' %}
 
 {% block body %}
-<h1 class="text-center text-info" style="margin: 25px">THONG KE DIEM TRUNG BINH</h1>
+<h1 class="text-center text-info" style="margin: 25px">THỐNG KÊ ĐIỂM TRUNG BÌNH</h1>
 
 <div class="row">
     <div class="col-md-6 col-xs-12">
         <table class="table">
-            <tr>
-                <th>Lớp</th>
-                <th>Số lượng học sinh</th>
-                <th>Kì học</th>
-            </tr>
-            {% for s in stats %}
-            <tr>
-                <td>{{ s[1] }}</td>
-                <td>{{ s[2] }}</td>
-                <td>{{ s[0] }}</td>
-            </tr>
-            {% endfor %}
+<!--            <tr>-->
+<!--                <th>Lớp</th>-->
+<!--                <th>Số lượng học sinh</th>-->
+<!--            </tr>-->
+<!--            {% for s in stats %}-->
+<!--            <tr>-->
+<!--                <td>{{ s[1] }}</td>-->
+<!--                <td>{{ s[2] }}</td>-->
+<!--            </tr>-->
+<!--            {% endfor %}-->
         </table>
     </div>
     <div class="col-md-6 col-xs-12">
-        <div>
-            <canvas id="myChart"></canvas>
+<!--        <div>-->
+<!--            <canvas id="myCharttest"></canvas>-->
 
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script>
+<!--            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+<!--            <script>-->
+<!--            let data =[]-->
+<!--            let labels=[]-->
+
+<!--            {% for s in stats %}-->
+<!--                labels.push('{{ s[1] }}')-->
+<!--                data.push({{ s[2] }})-->
+<!--            {% endfor %}-->
+
+<!--            window.onload =function()-->
+<!--            {-->
+<!--                const ctx = document.getElementById('testmyChart');-->
+<!--                const myChart = new Chart(ctx, {-->
+<!--                type: 'doughnut',-->
+<!--                data: {-->
+<!--                    labels: labels,-->
+<!--                    datasets: [{-->
+<!--                        label: 'Thống kê chung của trường',-->
+<!--                        data: data,-->
+<!--                        backgroundColor: [-->
+<!--                            'rgba(255, 99, 132, 0.2)',-->
+<!--                            'rgba(54, 162, 235, 0.2)',-->
+<!--                            'rgba(255, 206, 86, 0.2)',-->
+<!--                            'rgba(75, 192, 192, 0.2)',-->
+<!--                            'rgba(153, 102, 255, 0.2)',-->
+<!--                            'rgba(255, 159, 64, 0.2)'-->
+<!--                        ],-->
+<!--                        borderColor: [-->
+<!--                            'rgba(255, 99, 132, 1)',-->
+<!--                            'rgba(54, 162, 235, 1)',-->
+<!--                            'rgba(255, 206, 86, 1)',-->
+<!--                            'rgba(75, 192, 192, 1)',-->
+<!--                            'rgba(153, 102, 255, 1)',-->
+<!--                            'rgba(255, 159, 64, 1)'-->
+<!--                        ],-->
+<!--                        borderWidth: 1-->
+<!--                    }]-->
+<!--                },-->
+<!--                options: {-->
+<!--                    scales: {-->
+<!--                        y: {-->
+<!--                            beginAtZero: true-->
+<!--                        }-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--            }-->
+<!--        </script>-->
+<!--        </div>-->
+    </div>
+</div>
+
+<!--thống kê điểm trung bình của từng học sinh theo lớp-->
+
+<!--test-->
+<form action="/admin/statsviewdiem/">
+            <div class="form-group">
+                <input type="text" class="form-control" name="ten_lop" placeholder="Nhap ten lop muon thong ke..." />
+                <input type="text" class="form-control" name="ki_hoc" placeholder="Nhap ki hoc..." />
+                <input type="text" class="form-control" name="nam_hoc" placeholder="Nhap nam hoc.." />
+                <input type="text" class="form-control" name="mon_hoc" placeholder="Nhap mon hoc.." />
+            </div>
+            <input type="submit" value="Thong ke" class="btn btn-success" />
+</form>
+
+<div>
+        <table class="table">
+            <tr>
+                <th>Tên lớp</th>
+                <th>Học kì</th>
+                <th>Năm học</th>
+                <th>Họ tên học sinh</th>
+                <th>Môn học</th>
+                <th>Điểm trung bình</th>
+            </tr>
+            {% for d in diemtb %}
+            <tr><td>{{ d[0] }}</td>
+                <td>{{ d[1] }}</td>
+                <td>{{ d[2] }}</td>
+                <td>{{ d[3] }}</td>
+                <td>{{ d[4] }}</td>
+                <td>{{ d[5] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+</div>
+<!--chartij-->
+<div>
+    <canvas id="myChart"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
             let data =[]
-            let labels=[]
 
-            {% for s in stats %}
-                labels.push('{{ s[1] }}')
-                data.push({{ s[2] }})
+            {% for d in diemtb %}
+                {% for s in stats %}
+                    {% if s[1]==d[1] %}
+                        data.push({{ d[6] }})
+<!--                        data.push({{ s[2] }})-->
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
 
             window.onload =function()
@@ -40,7 +132,7 @@
                 const myChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: labels,
+                    labels: ['Đạt','Không đạt'],
                     datasets: [{
                         label: 'Thống kê chung của trường',
                         data: data,
@@ -73,87 +165,6 @@
             });
             }
         </script>
-        </div>
-    </div>
-</div>
-
-<!--thống kê điểm trung bình của từng học sinh theo lớp-->
-
-<!--test-->
-<div class="col-md-6 col-xs-12">
-        <table class="table">
-            <tr>
-                <th>Tên Lop</th>
-                <th>Ten Hoc Sinh</th>
-                <th>Điểm trung bình</th>
-            </tr>
-            {% for d in diemtb %}
-            <tr>
-                <td>{{ d[1] }}</td>
-                <td>{{ d[2] }}</td>
-                <td>{{ d[3] }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-</div>
-<div>
-    <form action="/admin/StatsViewDiem/">
-            <div class="form-group">
-                <input type="text" class="form-control" name="kw" placeholder="Nhap ten lop muon thong ke..." />
-            </div>
-            <input type="submit" value="Thong ke" class="btn btn-success" />
-        </form>
-        <div>
-            <canvas id="myChartDiem"></canvas>
-
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script>
-                let labels = []
-                let data = []
-
-                {% for d in diemtb %}
-                labels.push('{{ d[1] }}')
-                data.push({{ d[2] }})
-                {% endfor %}
-
-                const ctx = document.getElementById('myChartDiem').getContext('2d');
-                const myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                        datasets: [{
-                            label: label,
-                            data: data,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            </script>
-        </div>
-
 </div>
 
 

@@ -33,11 +33,14 @@ class MyAdminIndex(AdminIndexView):
 class StatsViewDiem(BaseView):
     @expose('/')
     def index(self):
-        kw = request.args.get('kw')
+        ten_lop = request.args.get('ten_lop')
+        ki_hoc = request.args.get('ki_hoc')
+        nam_hoc = request.args.get('nam_hoc')
+        mon_hoc = request.args.get('mon_hoc')
+
         return self.render('admin/lop_stats.html',
-                           kw=kw,
                            stats=utils.general_stats(),
-                           diemtb=utils.DiemTB())
+                           diemtb=utils.DiemTB(ten_lop=ten_lop, ki_hoc=ki_hoc, nam_hoc=nam_hoc, mon_hoc=mon_hoc))
 
 
 admin = Admin(app=app, name="QuanLyHocSinh", template_mode="bootstrap4", index_view=MyAdminIndex())

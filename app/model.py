@@ -138,9 +138,9 @@ if __name__=='__main__':
     db.session.add(k3)
     db.session.commit()
 
-    l1 = Lop( TenLop='10A1', SiSo=5)
-    l2 = Lop( TenLop='10A2', SiSo=5)
-    l3 = Lop( TenLop='10A3', SiSo=5)
+    l1 = Lop(TenLop='10A1', SiSo=5)
+    l2 = Lop(TenLop='10A2', SiSo=5)
+    l3 = Lop(TenLop='10A3', SiSo=5)
 
     db.session.add(l1)
     db.session.add(l2)

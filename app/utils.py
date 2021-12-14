@@ -1,5 +1,5 @@
 from app import app, db
-from app.model import User, UserRole, Lop, HocSinh, GiaoVien, NhanVien, Diem, MonHoc
+from app.model import User, UserRole, Lop, HocSinh, GiaoVien, NhanVien, Diem, MonHoc, KyHoc
 from flask_login import current_user
 from sqlalchemy import func
 from sqlalchemy.sql import extract
@@ -28,19 +28,27 @@ def lop_stats():
 
 
 #  Tinh Trung Binh Diem Cac Mon Hoc Cua Cac Hoc Sinh Lop Bat Ki
-# Select SinhVien.MaSV,TenSV,Lop.TenLop, SUM(DiemLan1*SoTrinh)/SUM(SoTrinh) as DiemTrungBinh
+# Select SinhVien.MaSV,TenSV,Lop.TenLop,
 #   From SinhVien,Diem,MonHoc,Lop
 #    Where SinhVien.MaLop=Lop.MaLop And Diem.MaSV=SinhVien.MaSV And Diem.MaMH=MonHoc.MaMH
-#          And TenLop=N'MÁy Tính 3'
 #    Group By SinhVien.MaSV,TenSV,Lop.TenLop
-def DiemTB(kw='TH6'):
-    return db.session.query(HocSinh.IDLop,HocSinh.IDHocSinh, HocSinh.name,
-                            func.avg(HocSinh.Diem_HocSinh)) \
-        .group_by(HocSinh.IDLop, HocSinh.IDHocSinh, HocSinh.name).all()
-    # if kw:
-    #     q = q.filter(HocSinh.IDLop.contain(kw))
-    #
-    # return q.group_by(Lop.TenLop, HocSinh.IDHocSinh, HocSinh.name).all()
+def DiemTB(ten_lop=None, ki_hoc=None, nam_hoc=None, mon_hoc=None):
+    q = db.session.query(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, HocSinh.name, MonHoc.TenMH, Diem.DiemTB, func.count(HocSinh.IDHocSinh))\
+                    .join(HocSinh, Lop.IDLop.__eq__(HocSinh.IDLop))\
+                    .join(Diem, Diem.IDHocSinh.__eq__(HocSinh.IDHocSinh))\
+                    .join(KyHoc, KyHoc.IDKyHoc.__eq__(Diem.IDKyHoc))\
+                    .join(MonHoc, MonHoc.IDMonHoc.__eq__(Diem.IDMonhoc))
+                    # .group_by(Lop.TenLop).all()
+    if ten_lop:
+        q = q.filter(Lop.TenLop.__eq__(ten_lop))
+    if ki_hoc:
+        q = q.filter(KyHoc.name.__eq__(ki_hoc))
+    if nam_hoc:
+        q = q.filter(KyHoc.NamHoc.__eq__(nam_hoc))
+    if mon_hoc:
+        q = q.filter(MonHoc.TenMH.__eq__(mon_hoc))
+    q.filter(Diem.DiemTB >= 5 )
+    return q.group_by(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, HocSinh.name, MonHoc.TenMH, Diem.DiemTB).all()
 
 def check_user(username, password, role=UserRole.EMPLOYEE):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
