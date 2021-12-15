@@ -39,7 +39,7 @@ class StatsViewDiem(BaseView):
         mon_hoc = request.args.get('mon_hoc')
 
         return self.render('admin/lop_stats.html',
-                           stats=utils.general_stats(),
+                           stats=utils.Diem_all(),
                            diemtb=utils.DiemTB(ten_lop=ten_lop, ki_hoc=ki_hoc, nam_hoc=nam_hoc, mon_hoc=mon_hoc))
 
 

@@ -33,7 +33,9 @@ def lop_stats():
 #    Where SinhVien.MaLop=Lop.MaLop And Diem.MaSV=SinhVien.MaSV And Diem.MaMH=MonHoc.MaMH
 #    Group By SinhVien.MaSV,TenSV,Lop.TenLop
 def DiemTB(ten_lop=None, ki_hoc=None, nam_hoc=None, mon_hoc=None):
-    q = db.session.query(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, HocSinh.name, MonHoc.TenMH, Diem.DiemTB, func.count(HocSinh.IDHocSinh))\
+    # q = db.session.query(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, HocSinh.name, MonHoc.TenMH, Diem.DiemTB
+    q = db.session.query(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, Diem.DiemTB,
+                         func.count(HocSinh.name), Lop.SiSo)\
                     .join(HocSinh, Lop.IDLop.__eq__(HocSinh.IDLop))\
                     .join(Diem, Diem.IDHocSinh.__eq__(HocSinh.IDHocSinh))\
                     .join(KyHoc, KyHoc.IDKyHoc.__eq__(Diem.IDKyHoc))\
@@ -48,7 +50,17 @@ def DiemTB(ten_lop=None, ki_hoc=None, nam_hoc=None, mon_hoc=None):
     if mon_hoc:
         q = q.filter(MonHoc.TenMH.__eq__(mon_hoc))
     q.filter(Diem.DiemTB >= 5 )
-    return q.group_by(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, HocSinh.name, MonHoc.TenMH, Diem.DiemTB).all()
+    # return q.group_by(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, Diem.DiemTB).all()
+    return q.group_by(Lop.TenLop).all()
+
+def Diem_all():
+    q = db.session.query(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, HocSinh.name, MonHoc.TenMH, Diem.DiemTB,
+                         func.count(HocSinh.name), Lop.SiSo) \
+        .join(HocSinh, Lop.IDLop.__eq__(HocSinh.IDLop)) \
+        .join(Diem, Diem.IDHocSinh.__eq__(HocSinh.IDHocSinh)) \
+        .join(KyHoc, KyHoc.IDKyHoc.__eq__(Diem.IDKyHoc)) \
+        .join(MonHoc, MonHoc.IDMonHoc.__eq__(Diem.IDMonhoc))
+    return q.group_by(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, Diem.DiemTB).all()
 
 def check_user(username, password, role=UserRole.EMPLOYEE):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
