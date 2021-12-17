@@ -57,11 +57,8 @@ def load_user(user_id):
 def nhanvien_logout():
     logout_user()
 
-    return redirect(url_for('nhanvien_login'))
+    return redirect(url_for('home'))
 
-# @app.route('/test', methods=['get', 'post'])
-# def test():
-#     return render_template('test.html')
 
 @app.route('/register', methods=['get', 'post'])
 def register():
