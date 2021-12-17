@@ -55,7 +55,7 @@ def DiemTB(ten_lop=None, ki_hoc=None, nam_hoc=None, mon_hoc=None):
 
 def Diem_all():
     q = db.session.query(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, HocSinh.name, MonHoc.TenMH, Diem.DiemTB,
-                         func.count(HocSinh.name), Lop.SiSo) \
+                         HocSinh.name, Lop.SiSo, func.count(Lop.TenLop)) \
         .join(HocSinh, Lop.IDLop.__eq__(HocSinh.IDLop)) \
         .join(Diem, Diem.IDHocSinh.__eq__(HocSinh.IDHocSinh)) \
         .join(KyHoc, KyHoc.IDKyHoc.__eq__(Diem.IDKyHoc)) \
@@ -68,16 +68,52 @@ def check_user(username, password, role=UserRole.EMPLOYEE):
     return User.query.filter(User.username.__eq__(username.strip()),
                              User.password.__eq__(password),
                              User.user_role.__eq__(role)).first()
-def register(name, gender, email, birthday, phone, username, password, role, avatar):
+def register_nhanvien(name, gender, email, birthday, phone, username, password, role, avatar):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
 
-    user = User(name=name.strip(), gender=gender, birthday=birthday, phone=phone,
+    nhanvien = NhanVien(name=name.strip(), gender=gender, birthday=birthday, phone=phone,
                 username=username.strip(),
                 password=password,
                 email=email.strip() if email else email,
-                avatar=avatar, role=role)
+                avatar=avatar, role="EMPLOYEE")
 
-    db.session.add(user)
+    db.session.add(nhanvien)
+
+    try:
+        db.session.commit()
+    except:
+        return False
+    else:
+        return True
+
+def register_giaovien(name, gender, email, birthday, phone, username, password, role, avatar):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+
+    giaovien = GiaoVien(name=name.strip(), gender=gender, birthday=birthday, phone=phone,
+                username=username.strip(),
+                password=password,
+                email=email.strip() if email else email,
+                avatar=avatar, role="TEACHER")
+
+    db.session.add(giaovien)
+
+    try:
+        db.session.commit()
+    except:
+        return False
+    else:
+        return True
+
+def register_hocsinh(name, gender, email, birthday, phone, username, password, role, avatar):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+
+    hocsinh = HocSinh(name=name.strip(), gender=gender, birthday=birthday, phone=phone,
+                username=username.strip(),
+                password=password,
+                email=email.strip() if email else email,
+                avatar=avatar, role="STUDENT")
+
+    db.session.add(hocsinh)
 
     try:
         db.session.commit()
