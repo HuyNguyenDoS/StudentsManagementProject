@@ -57,11 +57,9 @@ def load_user(user_id):
 def nhanvien_logout():
     logout_user()
 
-    return redirect(url_for('nhanvien_login'))
+    return redirect(url_for('home'))
+# tédst
 
-# @app.route('/test', methods=['get', 'post'])
-# def test():
-#     return render_template('test.html')
 
 @app.route('/register', methods=['get', 'post'])
 def register():
@@ -76,7 +74,7 @@ def register():
             username = request.form.get('username')
             password = request.form.get('password')
             password_confirm = request.form.get('confirm')
-            role = request.form.get('account')
+            role = request.form.get('role')
             if password.__eq__(password_confirm):
                 data = request.form.copy()
                 del data['confirm']
@@ -86,20 +84,22 @@ def register():
                 if file:
                     res = cloudinary.uploader.upload(file)
                     data['avatar'] = res['secure_url']
-                if role == 'STUDENT':
-                    suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
-                                            phone=phone, username=username, password=password, role="STUDENT")
-                    redirect(url_for('nhanvien_login'))
-                if role == 'TEACHER':
-                    suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
-                                            phone=phone, username=username, password=password, role="TEACHER")
-                    redirect(url_for('nhanvien_login'))
+                # if role == 'STUDENT':
+                #     utils.register_hocsinh(name=name, gender=gender, email=email, birthday=birthday,
+                #                             phone=phone, username=username, password=password)
+                #     redirect(url_for('nhanvien_login'))
+                # if role == 'TEACHER':
+                #     suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
+                #                             phone=phone, username=username, password=password)
+                #     redirect(url_for('nhanvien_login'))
                 if role == 'EMPLOYEE':
-                    suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
-                                            phone=phone, username=username, password=password, role="EMPLOYEE")
-                    redirect(url_for('nhanvien_login'))
-                else:
-                    error_msg = "Chuong trinh dang co loi! Vui long quay lai sau!"
+                    if utils.register_nhanvien(**data):
+                        return render_template('test.html')
+                        # redirect(url_for('nhanvien_login'))
+                    else:
+                        error_msg = "Chuong trinh dang co loi! Vui long quay lai sau!"
+            else:
+                error_msg = "Mật khẩu không trùng khớp!"
         except Exception as ex:
             error_msg = str(ex)
 
