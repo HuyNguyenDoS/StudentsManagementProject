@@ -27,10 +27,10 @@ def nhanvien_login():
             else:
                 error_msg = "Chuong trinh dang co loi! Vui long quay lai sau!"
 
-        except Exception as ex:
-            error_msg = str(ex)
+        except Exception :
+            error_msg = "Sai tên đăng nhập hoặc mật khẩu"
 
-    return render_template('index.html', error_msg=error_msg)
+    return render_template('login.html', error_msg=error_msg)
 
 # Login method for admin, page admin
 @app.route('/admin-login', methods=['post'])
@@ -75,23 +75,23 @@ def register():
             password_confirm = request.form.get('confirm')
             role = request.form.get('account')
             if password.__eq__(password_confirm):
-                data = request.form.copy()
-                del data['confirm']
-
-                file = request.files['avatar']
-
-                if file:
-                    res = cloudinary.uploader.upload(file)
-                    data['avatar'] = res['secure_url']
-                if role == 'STUDENT':
-                    suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
-                                            phone=phone, username=username, password=password, role="STUDENT")
-                    redirect(url_for('nhanvien_login'))
-                if role == 'TEACHER':
-                    suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
-                                            phone=phone, username=username, password=password, role="TEACHER")
-                    redirect(url_for('nhanvien_login'))
-                if role == 'EMPLOYEE':
+                # data = request.form.copy()
+                # del data['confirm']
+                #
+                # file = request.files['avatar']
+                #
+                # if file:
+                #     res = cloudinary.uploader.upload(file)
+                #     data['avatar'] = res['secure_url']
+                # if role == 'STUDENT':
+                #     suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
+                #                             phone=phone, username=username, password=password, role="STUDENT", avatar=avatar)
+                #     redirect(url_for('nhanvien_login'))
+                # if role == 'TEACHER':
+                #     suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
+                #                             phone=phone, username=username, password=password, role="TEACHER")
+                #     redirect(url_for('nhanvien_login'))
+                if role.__eq__('EMPLOYEE'):
                     suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
                                             phone=phone, username=username, password=password, role="EMPLOYEE")
                     redirect(url_for('nhanvien_login'))

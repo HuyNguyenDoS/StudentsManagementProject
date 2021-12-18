@@ -1,82 +1,62 @@
+<div class="modal-body">
+            <form method="post" class="was-validated" action="{{ url_for('register') }}" enctype="multipart/form-data">
+                <div class="split">
+                    <div class="form-left">
+                        <div class="form-group">
+                              <label for="name">Họ tên: </label>
+                              <input type="text" id="name" class="form-control" name="name" >
+                          </div>
+                           <div class="form-group">
+                                        <label for="gender">Giới tính: </label>
+                                            <select id="gender" name="gender" class="form-control" >
+                                                <option class="form-control" value="">----</option>
+                                                <option class="form-control" value=1>nam</option>
+                                                <option class="form-control" value=0>nữ</option>
+                                            </select>
+                          </div>
+                          <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email" >
+                          </div>
+                          <div class="form-group">
+                                <label for="birthday">Ngày sinh:</label>
+                                <input type="text" class="form-control" id="birthday" name="birthday" >
+                          </div>
+                          <div class="form-group">
+                                <label for="phone">Số điện thoại:</label>
+                                <input type="text" class="form-control" id="phone" name="phone" >
+                          </div>
+                      </div>
+    <!--                form-right-->
+                      <div class="form-right">
+                          <div class="form-group">
+                                <label for="username">Tên đăng nhập:</label>
+                                <input type="text" class="form-control" id="username" name="username" >
+                          </div>
+                          <div class="form-group">
+                                <label for="password">Mật khẩu:</label>
+                                <input type="password" class="form-control" id="password" name="password" >
+                          </div>
+                          <div class="form-group">
+                                <label for="confirm">Xác nhận mật khẩu:</label>
+                                <input type="password" class="form-control" id="confirm" name="confirm" >
+                          </div>
+                          <div class="form-group">
+                               <label for="avatar">Anh dai dien</label>
+                               <input type="file" name="avatar" class="form-control" id="avatar" />
+                          </div>
+                          <div class="form-group" style="padding-top: 30px">
+                                <label for="role">Loại tài khoản:</label>
+                                <select name="role" id="role">
+                                    <option value="STUDENT">Học sinh</option>
+                                    <option value="TEACHER">Giáo viên</option>
+                                    <option value="EMPLOYEE">Nhân viên</option>
+                                </select>
+                              <br><br>
+                          </div>
 
-<div class="modal js-modal" style="margin-top: -100px">
-    <div class="modal-container">
-        <div class="modal-close js-modal-close" onclick="Hide()">
-            <i class="fa fa-close"></i>
-        </div>
-        <header class="modal-header">
-            <h2>THEM TÀI KHOẢN</h2>
-        </header>
-        <div class="modal-body">
-            <form method="post" class="was-validated" action="{{ url_for('register') }}">
-                  <div class="form-group row">
-                      <label for="name">Họ tên: </label>
-                      <input type="text" id="name" class="form-control" name="name" required>
+                      </div>
                   </div>
-                   <div class="form-group row">
-                                <label for="gender">Giới tính: </label>
-                                    <select id="gender" name="gender" class="form-control">
-                                        <option class="form-control" value="">----</option>
-                                        <option class="form-control" value=1>nam</option>
-                                        <option class="form-control" value=0>nữ</option>
-                                    </select>
-                  </div>
-                  <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="password" required>
-                  </div>
-                  <div class="form-group">
-                        <label htmlFor="birthday">Ngày sinh:</label>
-                        <input type="birthday" class="form-control" id="birthday" name="password" required>
-                  </div>
-                  <div class="form-group">
-                        <label for="phone">Số điện thoại:</label>
-                        <input type="phone" class="form-control" id="phone" name="password" required>
-                  </div>
-                  <div class="form-group">
-                        <label for="username">Tên đăng nhập:</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                  </div>
-                  <div class="form-group">
-                        <label for="password">Mật khẩu:</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                  </div>
-                  <div class="form-group">
-                        <label for="password_confirm">Mật khẩu:</label>
-                        <input type="password" class="form-control" id="password_confirm" name="password" required>
-                  </div>
-                  <div class="form-group">
-                        <label for="role">Loại tài khoản:</label>
-                        <select name="role" id="role">
-                            <option value="STUDENT">Học sinh</option>
-                            <option value="TEACHER">Giáo viên</option>
-                            <option value="EMPLOYEE">Nhân viên</option>
-                        </select>
-                      <br><br>
-                  </div>
-                  <div class="form-group">
-                       <label for="avatar">Anh dai dien</label>
-                       <input type="file" name="avatar" class="form-control" id="avatar" />
-                   </div>
                   <input type="submit" value="Login" class="btn btn-danger">
             </form>
         </div>
-    </div>
- </div>
-
-<script>
-    function Show() {
-        modal.classList.add('open')
-    }
-
-    function Hide() {
-        modal.classList.remove('open')
-    }
-    const loginBtn = document.querySelectorAll('.js-login')
-    const modal = document.querySelector('.js-modal')
-    const modalClose = document.querySelector('.js-modal-close')
-
-    loginBtn.addEventListener("click", ShowLogin)
-
-
-</script>

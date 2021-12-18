@@ -53,13 +53,16 @@ def DiemTB(ten_lop=None, ki_hoc=None, nam_hoc=None, mon_hoc=None):
     # return q.group_by(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, Diem.DiemTB).all()
     return q.group_by(Lop.TenLop).all()
 
-def Diem_all():
+def Diem_all(nam_hoc=None):
     q = db.session.query(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, HocSinh.name, MonHoc.TenMH, Diem.DiemTB,
                          func.count(HocSinh.name), Lop.SiSo) \
         .join(HocSinh, Lop.IDLop.__eq__(HocSinh.IDLop)) \
         .join(Diem, Diem.IDHocSinh.__eq__(HocSinh.IDHocSinh)) \
         .join(KyHoc, KyHoc.IDKyHoc.__eq__(Diem.IDKyHoc)) \
         .join(MonHoc, MonHoc.IDMonHoc.__eq__(Diem.IDMonhoc))
+    if nam_hoc:
+        q =q.filter(KyHoc.NamHoc.__eq__(nam_hoc))
+
     return q.group_by(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, Diem.DiemTB).all()
 
 def check_user(username, password, role=UserRole.EMPLOYEE):

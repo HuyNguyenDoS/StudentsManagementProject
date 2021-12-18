@@ -90,7 +90,7 @@ class MonHoc(db.Model):
         return self.TenMH
 
 class HocSinh(db.Model):
-    IDHocSinh = Column(Integer, primary_key=True, autoincrement=True)
+    IDHocSinh = Column(Integer, primary_key=True, unique=True)
     name = Column(String(50), nullable=False)
     birthday = Column(DateTime, nullable=False)
     address = Column(String(50), nullable=False)
@@ -127,6 +127,7 @@ class Diem(db.Model):
 
 
 if __name__=='__main__':
+
     db.create_all()
 
     k1 = KyHoc(name='HK1', NamHoc='2020')
@@ -147,35 +148,35 @@ if __name__=='__main__':
     db.session.add(l3)
     db.session.commit()
 
-    s1 = HocSinh(name='Diệp Quỳnh Như', birthday='2001-11-20 00:00:00', address='Bình Định', email='nhu@gmail.com',
+    s1 = HocSinh(IDHocSinh='1951052134', name='Diệp Quỳnh Như', birthday='2001-11-20 00:00:00', address='Bình Định', email='nhu@gmail.com',
                  numbers='0123456789', gender=1, IDLop=1)
-    s2 = HocSinh(name='Trần Ái vi', birthday='2001-11-20 00:00:00', address='Bình Định', email='vi@gmail.com',
+    s2 = HocSinh(IDHocSinh='1951052135', name='Trần Ái vi', birthday='2001-11-20 00:00:00', address='Bình Định', email='vi@gmail.com',
                  numbers='01234567891', gender=1, IDLop=1)
-    s3 = HocSinh(name='Huỳnh Thanh Thoa', birthday='2001-11-20 00:00:00', address='Bình Định', email='thoa@gmail.com',
+    s3 = HocSinh(IDHocSinh='1951052136', name='Huỳnh Thanh Thoa', birthday='2001-11-20 00:00:00', address='Bình Định', email='thoa@gmail.com',
                  numbers='01234567892', gender=1, IDLop=1)
-    s4 = HocSinh(name='Nguyễn Quốc', birthday='2001-11-20 00:00:00', address='Bình Định', email='quoc@gmail.com',
+    s4 = HocSinh(IDHocSinh='1951052137', name='Nguyễn Quốc', birthday='2001-11-20 00:00:00', address='Bình Định', email='quoc@gmail.com',
                  numbers='01234567893', gender=0, IDLop=1)
-    s5 = HocSinh(name='Đặng Văn Mạnh', birthday='2001-11-20 00:00:00', address='Bình Định', email='mạnh@gmail.com',
+    s5 = HocSinh(IDHocSinh='1951052138', name='Đặng Văn Mạnh', birthday='2001-11-20 00:00:00', address='Bình Định', email='mạnh@gmail.com',
                  numbers='01234567894', gender=0, IDLop=1)
-    s6 = HocSinh(name='Nguyễn Văn Thân', birthday='2001-11-20 00:00:00', address='Bình Định', email='than@gmail.com',
+    s6 = HocSinh(IDHocSinh='1951052139', name='Nguyễn Văn Thân', birthday='2001-11-20 00:00:00', address='Bình Định', email='than@gmail.com',
                  numbers='01234567895', gender=1, IDLop=2)
-    s7 = HocSinh(name='Ngân Nguyễn', birthday='2001-11-20 00:00:00', address='Bình Định', email='ngan@gmail.com',
+    s7 = HocSinh(IDHocSinh='1951052110', name='Ngân Nguyễn', birthday='2001-11-20 00:00:00', address='Bình Định', email='ngan@gmail.com',
                  numbers='01234567896', gender=1, IDLop=2)
-    s8 = HocSinh(name='Lê Phương', birthday='2001-11-20 00:00:00', address='Bình Định', email='phuong@gmail.com',
+    s8 = HocSinh(IDHocSinh='1951052111', name='Lê Phương', birthday='2001-11-20 00:00:00', address='Bình Định', email='phuong@gmail.com',
                  numbers='01234567897', gender=1, IDLop=2)
-    s9 = HocSinh(name='Võ Văn Hiếu', birthday='2001-11-20 00:00:00', address='Bình Định', email='hieu@gmail.com',
+    s9 = HocSinh(IDHocSinh='1951052112', name='Võ Văn Hiếu', birthday='2001-11-20 00:00:00', address='Bình Định', email='hieu@gmail.com',
                  numbers='01234567898', gender=1, IDLop=2)
-    s10 = HocSinh(name='Đặng Thúy Nga', birthday='2001-11-20 00:00:00', address='Bình Định', email='nga@gmail.com',
+    s10 = HocSinh(IDHocSinh='1951052113', name='Đặng Thúy Nga', birthday='2001-11-20 00:00:00', address='Bình Định', email='nga@gmail.com',
                   numbers='01234567899', gender=1, IDLop=2)
-    s11 = HocSinh(name='Nguyễn Quốc Toàn', birthday='2001-11-20 00:00:00', address='Bình Định', email='toan@gmail.com',
+    s11 = HocSinh(IDHocSinh='1951052114', name='Nguyễn Quốc Toàn', birthday='2001-11-20 00:00:00', address='Bình Định', email='toan@gmail.com',
                   numbers='01234567810', gender=1, IDLop=3)
-    s12 = HocSinh(name='Nguyễn Văn Tiến', birthday='2001-11-20 00:00:00', address='Bình Định', email='tien@gmail.com',
+    s12 = HocSinh(IDHocSinh='1951052115', name='Nguyễn Văn Tiến', birthday='2001-11-20 00:00:00', address='Bình Định', email='tien@gmail.com',
                   numbers='0123456711', gender=1, IDLop=3)
-    s13 = HocSinh(name='Nguyễn Thu', birthday='2001-11-20 00:00:00', address='Bình Định', email='thu@gmail.com',
+    s13 = HocSinh(IDHocSinh='1951052116', name='Nguyễn Thu', birthday='2001-11-20 00:00:00', address='Bình Định', email='thu@gmail.com',
                   numbers='0123456712', gender=1, IDLop=3)
-    s14 = HocSinh(name='Võ Phương Chi', birthday='2001-11-20 00:00:00', address='Bình Định', email='chi@gmail.com',
+    s14 = HocSinh(IDHocSinh='1951052117', name='Võ Phương Chi', birthday='2001-11-20 00:00:00', address='Bình Định', email='chi@gmail.com',
                   numbers='0123456713', gender=1, IDLop=3)
-    s15 = HocSinh(name='Nguyễn Hữu Thắng', birthday='2001-11-20 00:00:00', address='Bình Định', email='thang@gmail.com',
+    s15 = HocSinh(IDHocSinh='1951052118', name='Nguyễn Hữu Thắng', birthday='2001-11-20 00:00:00', address='Bình Định', email='thang@gmail.com',
                   numbers='0123456714', gender=1, IDLop=3)
 
     db.session.add(s1)

@@ -1,6 +1,9 @@
 {% extends 'layout/base.html' %}
 
+
 {% block title %} Trang chu {% endblock %}
+
+{% if current_user.is_authenticated and current_user.user_role == 'EMPLOYEE' %}
 
 {% block header %}
     <nav class="navbar navbar-expand-md">
@@ -11,7 +14,7 @@
             <a class="" href="#">OU SCHOOL</a>
       </div>
 
-      <button class="btn btn-home" onclick="Show()" type="submit"> Add Account</button>
+      <button class="btn btn-home" onclick="Show()" type="submit" href="{{ url_for('register') }}"> Add Account</button>
       <div class="form-inline">
         <button class="btn btn-home" type="submit">Home</button>
         <button class="btn btn-success border" type="submit">
@@ -32,7 +35,7 @@
             <h4>{{ erg_msg }}</h4>
         {% endif %}
         <div class="modal-body">
-            <form method="post" class="was-validated" action="{{ url_for('nhanvien_login') }}">
+            <form method="post" class="was-validated" action="{{ url_for('register') }}">
                 <div class="split">
                     <div class="form-left">
                         <div class="form-group">
@@ -119,6 +122,8 @@
  </div>
 
 <br><br>
+
+{% endif %}
 
 
 
