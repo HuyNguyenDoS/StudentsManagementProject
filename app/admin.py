@@ -80,12 +80,16 @@ class HocSinhView(AuthenticatedModelView):
                      'note' :'Ghi chú'}
 
 
+class LopView(AuthenticatedModelView):
+    column_descriptions = {'SiSo': 'Tối đa 40 em học sinh',
+                           'TenLop': 'Khối 10, 11, 12. Định dạng theo bảng chữ cái. Ví dụ 10A, 10B, 10C'}
+
+
 admin = Admin(app=app, name="QuanLyHocSinh", template_mode="bootstrap4", index_view=MyAdminIndex())
 
 
-# admin.add_view(AuthenticatedModelView(HocSinh, db.session, name='Toàn Học Sinh'))
 admin.add_view(HocSinhView(HocSinh, db.session,name="Toàn học sinh"))
-admin.add_view(AuthenticatedModelView(Lop, db.session, name='Lớp'))
+admin.add_view(LopView(Lop, db.session, name='Lớp'))
 admin.add_view(AuthenticatedModelView(User, db.session, name='User'))
 admin.add_view(DiemView(Diem, db.session, name='Điểm'))
 admin.add_view(XuatViewDiem(name='Xuất Điểm'))

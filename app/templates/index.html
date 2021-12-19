@@ -3,101 +3,27 @@
 
 {% block title %} Trang chu {% endblock %}
 
-{% if current_user.is_authenticated and current_user.user_role == 'EMPLOYEE' %}
+{% if current_user.is_authenticated  %}
 
 {% block header %}
     <nav class="navbar navbar-expand-md">
-
-
-      <!-- Navbar links -->
+  <!-- Navbar links -->
       <div class="collapse navbar-collapse mgl-5" id="collapsibleNavbar">
-            <a class="" href="#">OU SCHOOL</a>
+            <a class="ou" href="#">OU SCHOOL</a>
       </div>
-
-      <button class="btn btn-home" onclick="Show()" type="submit" href="{{ url_for('register') }}"> Add Account</button>
-      <div class="form-inline">
-        <button class="btn btn-home" type="submit">Home</button>
+         <button class="btn btn-success border" >
+            <a href="{{ url_for('regiter_hocsinh') }}">Add Student</a>
+        </button>
+        <button class="btn btn-success border" >
+            <a href="{{ url_for('register') }}">Create Account</a>
+        </button>
+        <button class="btn btn-home js-login" type="submit">Home</button>
         <button class="btn btn-success border" type="submit">
             <a href="{{url_for('nhanvien_logout') }}">Logout</a>
         </button>
-      </div>
     </nav>
 
-<div class="modal js-modal">
-    <div class="modal-container modal-add-account">
-        <div class="modal-close js-modal-close" onclick="Hide()">
-            <i class="fa fa-close"></i>
-        </div>
-        <header class="modal-header header-account">
-            <h2>Add Account</h2>
-        </header>
-        {% if err_msg %}
-            <h4>{{ erg_msg }}</h4>
-        {% endif %}
-        <div class="modal-body">
-            <form method="post" class="was-validated" action="{{ url_for('register') }}">
-                <div class="split">
-                    <div class="form-left">
-                        <div class="form-group">
-                              <label for="name">Họ tên: </label>
-                              <input type="text" id="name" class="form-control" name="name" >
-                          </div>
-                           <div class="form-group">
-                                        <label for="gender">Giới tính: </label>
-                                            <select id="gender" name="gender" class="form-control" >
-                                                <option class="form-control" value="">----</option>
-                                                <option class="form-control" value=1>nam</option>
-                                                <option class="form-control" value=0>nữ</option>
-                                            </select>
-                          </div>
-                          <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="email" name="email" >
-                          </div>
-                          <div class="form-group">
-                                <label for="birthday">Ngày sinh:</label>
-                                <input type="text" class="form-control" id="birthday" name="birthday" >
-                          </div>
-                          <div class="form-group">
-                                <label for="phone">Số điện thoại:</label>
-                                <input type="text" class="form-control" id="phone" name="phone" >
-                          </div>
-                      </div>
-    <!--                form-right-->
-                      <div class="form-right">
-                          <div class="form-group">
-                                <label for="username">Tên đăng nhập:</label>
-                                <input type="text" class="form-control" id="username" name="username" >
-                          </div>
-                          <div class="form-group">
-                                <label for="password">Mật khẩu:</label>
-                                <input type="password" class="form-control" id="password" name="password" >
-                          </div>
-                          <div class="form-group">
-                                <label for="confirm">Xác nhận mật khẩu:</label>
-                                <input type="password" class="form-control" id="confirm" name="confirm" >
-                          </div>
-                          <div class="form-group">
-                               <label for="avatar">Anh dai dien</label>
-                               <input type="file" name="avatar" class="form-control" id="avatar" />
-                          </div>
-                          <div class="form-group" style="padding-top: 30px">
-                                <label for="role">Loại tài khoản:</label>
-                                <select name="role" id="role">
-                                    <option value="STUDENT">Học sinh</option>
-                                    <option value="TEACHER">Giáo viên</option>
-                                    <option value="EMPLOYEE">Nhân viên</option>
-                                </select>
-                              <br><br>
-                          </div>
 
-                      </div>
-                  </div>
-                  <input type="submit" value="Login" class="btn btn-danger">
-            </form>
-        </div>
-    </div>
- </div>
 
 <script>
     function Show() {
@@ -107,12 +33,15 @@
     function Hide() {
         modal.classList.remove('open')
     }
-    const loginBtn = document.querySelectorAll('.js-login')
+    const siginBtn = document.querySelectorAll('.js-login')
     const modal = document.querySelector('.js-modal')
     const modalClose = document.querySelector('.js-modal-close')
 
+    siginBtn.addEventListener("click", Show)
+
 
 </script>
+
 {% endblock %}
 
 {% block content %}
@@ -121,10 +50,8 @@
      <span class="banner-text">Learning Today, Leading Tomorrow</span>
  </div>
 
-<br><br>
-
-{% endif %}
-
-
+    <br><br>
 
 {% endblock %}
+
+{% endif %}

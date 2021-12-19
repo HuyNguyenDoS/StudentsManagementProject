@@ -25,10 +25,10 @@ def nhanvien_login():
 
                 return render_template('index.html')
             else:
-                error_msg = "Chuong trinh dang co loi! Vui long quay lai sau!"
+                error_msg = "Sai tên đăng nhập hoặc mật khẩu!"
 
-        except Exception :
-            error_msg = "Sai tên đăng nhập hoặc mật khẩu"
+        except Exception as ex:
+            error_msg = str(ex)
 
     return render_template('login.html', error_msg=error_msg)
 
@@ -59,48 +59,94 @@ def nhanvien_logout():
 
     return redirect(url_for('home'))
 
-
 @app.route('/register', methods=['get', 'post'])
 def register():
     error_msg = ""
     if request.method.__eq__('POST'):
         try:
-            name = request.form.get('name')
-            gender = request.form.get('gender')
-            email = request.form.get('email')
-            birthday = request.form.get('birthday')
-            phone = request.form.get('phone')
-            username = request.form.get('username')
-            password = request.form.get('password')
-            password_confirm = request.form.get('confirm')
-            role = request.form.get('account')
-            if password.__eq__(password_confirm):
+            name = request.form['name']
+            username = request.form['username']
+            password = request.form['password']
+            confirm = request.form['confirm']
+            gender = request.form['gender']
+            birthday = request.form['birthday']
+            numbers = request.form['numbers']
+            role = request.form['role']
+            email = request.form['email']
+            # avatar = request.form['avatar']
+            avatar='test'
+
+            if password.__eq__(confirm):
                 # data = request.form.copy()
                 # del data['confirm']
-                #
                 # file = request.files['avatar']
-                #
-                # if file:
-                #     res = cloudinary.uploader.upload(file)
-                #     data['avatar'] = res['secure_url']
-                # if role == 'STUDENT':
-                #     suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
-                #                             phone=phone, username=username, password=password, role="STUDENT", avatar=avatar)
-                #     redirect(url_for('nhanvien_login'))
-                # if role == 'TEACHER':
-                #     suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
-                #                             phone=phone, username=username, password=password, role="TEACHER")
-                #     redirect(url_for('nhanvien_login'))
+                # res = cloudinary.uploader.upload(file)
+                # avatar = res['secure_url']
                 if role.__eq__('EMPLOYEE'):
-                    suscess = utils.register(name=name, gender=gender, email=email, birthday=birthday,
-                                            phone=phone, username=username, password=password, role="EMPLOYEE")
-                    redirect(url_for('nhanvien_login'))
-                else:
-                    error_msg = "Chuong trinh dang co loi! Vui long quay lai sau!"
+                    if (utils.register(name=name, gender=gender, email=email, birthday=birthday, numbers=numbers,
+                                       username=username, password=password, role=role, avatar=avatar)):
+                        error_msg = "Successful"
+                        return render_template('nhanvien_register.html', error_msg=error_msg)
+                    else:
+                        error_msg = "Failed"
+                        return render_template('nhanvien_register.html', error_msg=error_msg)
+                if role.__eq__('TEACHER'):
+                    if (utils.register(name=name, gender=gender, email=email, birthday=birthday, numbers=numbers,
+                                       username=username, password=password, role=role, avatar=avatar)):
+                        error_msg = "Successful"
+                        return render_template('nhanvien_register.html', error_msg=error_msg)
+                    else:
+                        error_msg = "Failed"
+                        return render_template('nhanvien_register.html', error_msg=error_msg)
+                if role.__eq__('STUDENT'):
+                    if (utils.register(name=name, gender=gender, email=email, birthday=birthday, numbers=numbers,
+                                       username=username, password=password, role=role, avatar=avatar)):
+                        error_msg = "Successful"
+                        return render_template('nhanvien_register.html', error_msg=error_msg)
+                    else:
+                        error_msg = "Failed"
+                        return render_template('nhanvien_register.html', error_msg=error_msg)
+            else:
+                error_msg = "Password incorrect!!!"
         except Exception as ex:
             error_msg = str(ex)
 
-    return render_template('index.html', error_msg=error_msg)
+    return render_template('nhanvien_register.html', error_msg=error_msg)
+
+@app.route('/regiter_hocsinh', methods=['get', 'post'])
+def regiter_hocsinh():
+    error_msg = ""
+    if request.method.__eq__('POST'):
+        try:
+            IDHocSinh = request.form['IDHocSinh']
+            name = request.form['name']
+            username = request.form['username']
+            password = request.form['password']
+            confirm = request.form['confirm']
+            gender = request.form['gender']
+            birthday = request.form['birthday']
+            numbers = request.form['numbers']
+            lop = request.form['lop']
+            email = request.form['email']
+            note = request.form['note']
+            address = request.form['address']
+            avatar = 'test'
+
+            if password.__eq__(confirm):
+                if (utils.register_hocsinh(IDHocSinh=IDHocSinh, name=name, gender=gender, email=email, birthday=birthday,
+                                           numbers=numbers, username=username, password=password, avatar=avatar, lop=lop,
+                                            note=note, address=address)):
+                        error_msg = "Successful"
+                        return render_template('hocsinh_register.html', error_msg=error_msg)
+                else:
+                        error_msg = "Failed"
+                        return render_template('hocsinh_register.html', error_msg=error_msg)
+            else:
+                error_msg = "Password incorrect!!!"
+        except Exception as ex:
+            error_msg = str(ex)
+
+    return render_template('hocsinh_register.html', error_msg=error_msg, lop=utils.ds_lop())
 
 
 if __name__ == '__main__':

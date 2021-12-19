@@ -1,3 +1,22 @@
+
+.modal-login{
+    width: 80%;
+    margin: 0 auto;
+}
+
+.login-user{
+    display: flex;
+}
+
+.f-left{
+    width: 45%;
+    margin-right: 5%;
+}
+
+.f-right{
+    width: 45%;
+}
+
 .navbar a {
     padding: 0 !important;
     font-size: 16px !important;
@@ -71,6 +90,7 @@ h1, h2, h3, h4, h5, h6 {
     background-color: white;
     color: green;
     font-weight: 500;
+
  }
 
  .jumbotron{
@@ -195,6 +215,28 @@ h1, h2, h3, h4, h5, h6 {
     .form-right{
         width: 48%;
     }
+
+    .btn-account,
+    .btn-account > a{
+        color: green !important;
+        background-color: #fff !important;
+        cursor: pointer;
+
+    }
+
+    .btn-account:hover{
+        opacity: 0.8;
+    }
+
+    .btn-success {
+        color: #fff;
+        background-color: green !important;
+
+
+    }
+
+
+
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/

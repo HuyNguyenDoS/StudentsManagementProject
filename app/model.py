@@ -17,7 +17,7 @@ class User(db.Model, UserMixin):
     name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
-    birthday = Column(DateTime, nullable=False)
+    birthday = Column(DateTime)
     email = Column(String(50))
     active = Column(Boolean, default=True)
     joined_date = Column(DateTime, default=datetime.now())
@@ -33,11 +33,11 @@ class User(db.Model, UserMixin):
 class GiaoVien(db.Model):
     IDGiaoVien = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
-    birthday = Column(DateTime, nullable=False)
-    address = Column(String(50), nullable=False)
-    email = Column(String(50), nullable=False, unique=True)
-    numbers = Column(String(50), nullable=False, unique=True)
-    gender = Column(Boolean, nullable=False)
+    birthday = Column(DateTime)
+    email = Column(String(50))
+    numbers = Column(String(50))
+    gender = Column(String(50), nullable=False)
+    avatar = Column(String(100))
     note = Column(String(100))
 
     user_id = Column(Integer, ForeignKey(User.id))
@@ -48,12 +48,12 @@ class GiaoVien(db.Model):
 class NhanVien(db.Model):
     IDNhanVien = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
-    birthday = Column(DateTime, nullable=False)
-    address = Column(String(50), nullable=False)
-    email = Column(String(50), nullable=False, unique=True)
-    numbers = Column(String(50), nullable=False, unique=True)
-    gender = Column(Boolean, nullable=False)
+    birthday = Column(DateTime)
+    email = Column(String(50))
+    numbers = Column(String(50))
+    gender = Column(String(50), nullable=False)
     note = Column(String(100))
+    avatar = Column(String(100))
 
     nhanvien = Column(Integer, ForeignKey(User.id))
 
@@ -92,11 +92,12 @@ class MonHoc(db.Model):
 class HocSinh(db.Model):
     IDHocSinh = Column(Integer, primary_key=True, unique=True)
     name = Column(String(50), nullable=False)
-    birthday = Column(DateTime, nullable=False)
-    address = Column(String(50), nullable=False)
+    birthday = Column(DateTime)
     email = Column(String(50), nullable=False, unique=True)
-    numbers = Column(String(50), unique=True)
-    gender = Column(Boolean, nullable=False)
+    numbers = Column(String(50))
+    gender = Column(String(50), nullable=False)
+    avatar = Column(String(100))
+    address = Column(String(100))
     note = Column(String(100))
 
     IDLop = Column(Integer, ForeignKey(Lop.IDLop))
@@ -213,5 +214,9 @@ if __name__=='__main__':
     # db.session.commit()
 
     admin = User(name='admin', username='admin', password='21232f297a57a5a743894a0e4a801fc3', birthday='2001-11-20 00:00:00' ,user_role='ADMIN')
+    user = User(name='user', username='user', password='ee11cbb19052e40b07aac0ca060c23ee', birthday='2001-11-20 00:00:00' ,user_role='EMPLOYEE')
     db.session.add(admin)
+    db.session.add(user)
+    # mk admin:admin
+    # user: user
     db.session.commit()
