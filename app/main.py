@@ -1,5 +1,7 @@
+import cloudinary.uploader
 from flask import render_template, request, redirect, url_for, session, flash
 from flask_login import login_user, logout_user, login_required
+import datetime
 import utils
 from app.admin import *
 from app.model import UserRole
@@ -73,18 +75,16 @@ def register():
             numbers = request.form['numbers']
             role = request.form['role']
             email = request.form['email']
-            # avatar = request.form['avatar']
-            avatar='test'
+            avatar_path = None
 
             if password.__eq__(confirm):
-                # data = request.form.copy()
-                # del data['confirm']
-                # file = request.files['avatar']
-                # res = cloudinary.uploader.upload(file)
-                # avatar = res['secure_url']
+                avatar = request.files['avatar']
+                if avatar:
+                    res = cloudinary.uploader.upload(avatar)
+                    avatar_path = res['secure_url']
                 if role.__eq__('EMPLOYEE'):
                     if (utils.register(name=name, gender=gender, email=email, birthday=birthday, numbers=numbers,
-                                       username=username, password=password, role=role, avatar=avatar)):
+                                       username=username, password=password, role=role, avatar=avatar_path)):
                         error_msg = "Successful"
                         return render_template('nhanvien_register.html', error_msg=error_msg)
                     else:
@@ -92,15 +92,7 @@ def register():
                         return render_template('nhanvien_register.html', error_msg=error_msg)
                 if role.__eq__('TEACHER'):
                     if (utils.register(name=name, gender=gender, email=email, birthday=birthday, numbers=numbers,
-                                       username=username, password=password, role=role, avatar=avatar)):
-                        error_msg = "Successful"
-                        return render_template('nhanvien_register.html', error_msg=error_msg)
-                    else:
-                        error_msg = "Failed"
-                        return render_template('nhanvien_register.html', error_msg=error_msg)
-                if role.__eq__('STUDENT'):
-                    if (utils.register(name=name, gender=gender, email=email, birthday=birthday, numbers=numbers,
-                                       username=username, password=password, role=role, avatar=avatar)):
+                                       username=username, password=password, role=role, avatar=avatar_path)):
                         error_msg = "Successful"
                         return render_template('nhanvien_register.html', error_msg=error_msg)
                     else:
@@ -116,6 +108,8 @@ def register():
 @app.route('/regiter_hocsinh', methods=['get', 'post'])
 def regiter_hocsinh():
     error_msg = ""
+    datetime_object = int((datetime.now()).year)
+
     if request.method.__eq__('POST'):
         try:
             IDHocSinh = request.form['IDHocSinh']
@@ -130,19 +124,26 @@ def regiter_hocsinh():
             email = request.form['email']
             note = request.form['note']
             address = request.form['address']
-            avatar = 'test'
-
-            if password.__eq__(confirm):
-                if (utils.register_hocsinh(IDHocSinh=IDHocSinh, name=name, gender=gender, email=email, birthday=birthday,
-                                           numbers=numbers, username=username, password=password, avatar=avatar, lop=lop,
-                                            note=note, address=address)):
-                        error_msg = "Successful"
-                        return render_template('hocsinh_register.html', error_msg=error_msg)
+            avatar_path = None
+            do_tuoi = int(birthday[0:4])
+            if (datetime_object - do_tuoi) >= 15 :
+                if password.__eq__(confirm):
+                    avatar = request.files['avatar']
+                    if avatar:
+                        res = cloudinary.uploader.upload(avatar)
+                        avatar_path = res['secure_url']
+                    if (utils.register_hocsinh(IDHocSinh=IDHocSinh, name=name, gender=gender, email=email, birthday=birthday,
+                                               numbers=numbers, username=username, password=password, avatar=avatar, lop=lop,
+                                                note=note, address=address)):
+                            error_msg = "Successful"
+                            return render_template('hocsinh_register.html', error_msg=error_msg)
+                    else:
+                            error_msg = "Failed"
+                            return render_template('hocsinh_register.html', error_msg=error_msg)
                 else:
-                        error_msg = "Failed"
-                        return render_template('hocsinh_register.html', error_msg=error_msg)
+                    error_msg = 'Incorrect Password!!!'
             else:
-                error_msg = "Password incorrect!!!"
+                error_msg = 'tuoi lol'
         except Exception as ex:
             error_msg = str(ex)
 

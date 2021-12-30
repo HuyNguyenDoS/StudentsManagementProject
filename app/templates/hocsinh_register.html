@@ -8,21 +8,20 @@
 <h1 class="text-center text-success"> THÊM HỌC SINH </h1>
 
 <script>
-
-    function ShowAlert() {
         let a = new Date().getFullYear()
         let input = document.getElementById('birthday').value
+        var inputID = document.getElementById('birthday');
         var date = new Date(input)
-        if (a - date.getFullYear() >= 15) {
-            alert('Đủ tuổi')
+        inputID.oninvalid = function(event){
+            if (a - date.getFullYear() >= 15) {
+                event.target.setCustomValidity('Do tuoi hop le');
+            }
+            else{
+                event.target.setCustomValidity('tuoi khong hop le');
+            }
         }
-        else{
-            alert('k đủ tuổi')
-        }
-    }
-
-
 </script>
+
 
 
 {% if error_msg %}
@@ -56,6 +55,7 @@
                       </div>
                     <div class="form-group">
                             <label for="birthday">Ngày sinh:</label>
+                            <div id="notify" style="display: none">thong bao</div>
                             <input type="date" class="form-control" id="birthday" name="birthday" >
                       </div>
                     <div class="form-group">
@@ -101,7 +101,7 @@
                       </div>
                 </div>
            </div>
-                  <input type="submit" onclick="ShowAlert()" value="Create" class="btn btn-danger">
+                  <input type="submit" value="Create" class="btn btn-danger">
      </form>
 </div>
 <br><br>

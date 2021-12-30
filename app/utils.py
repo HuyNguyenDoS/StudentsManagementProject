@@ -73,19 +73,20 @@ def check_user(username, password, role=UserRole.EMPLOYEE):
     return User.query.filter(User.username.__eq__(username.strip()),
                              User.password.__eq__(password),
                              User.user_role.__eq__(role)).first()
-def register(name, gender, email, birthday, numbers, username, password, role, avatar):
+def register(name, gender, email, birthday, numbers, username, password, role, **kwargs):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
 
-    user = User(name=name.strip(), username=username.strip(), password=password, user_role=role, birthday=birthday)
+    user = User(name=name.strip(), username=username.strip(), password=password, user_role=role, birthday=birthday,
+                avatar=kwargs.get('avatar'))
 
     if role.__eq__('EMPLOYEE'):
         nhanvien = NhanVien(name=name.strip(), gender=gender, numbers=numbers, birthday=birthday,
-                email=email.strip() if email else email, avatar=avatar)
+                email=email.strip() if email else email, avatar=kwargs.get('avatar'))
         db.session.add(nhanvien)
         db.session.add(user)
     if role.__eq__('TEACHER'):
         giaovien = GiaoVien(name=name.strip(), gender=gender, numbers=numbers, birthday=birthday,
-                email=email.strip() if email else email, avatar=avatar)
+                email=email.strip() if email else email, avatar=kwargs.get('avatar'))
         db.session.add(giaovien)
         db.session.add(user)
 
@@ -97,13 +98,14 @@ def register(name, gender, email, birthday, numbers, username, password, role, a
     else:
         return True
 
-def register_hocsinh(IDHocSinh, name, gender, email, birthday, numbers, username, password, avatar, note, address, lop):
+def register_hocsinh(IDHocSinh, name, gender, email, birthday, numbers, username, password, avatar, note, address, lop, **kwargs):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
 
-    user = User(name=name.strip(), username=username.strip(), password=password, user_role='STUDENT', birthday=birthday)
+    user = User(name=name.strip(), username=username.strip(), password=password, user_role='STUDENT', birthday=birthday,
+                avatar=kwargs.get('avatar'))
 
     hocsinh = HocSinh(IDHocSinh=IDHocSinh, name=name.strip(), gender=gender, numbers=numbers, birthday=birthday, IDLop=lop,
-                            email=email.strip() if email else email, avatar=avatar, note=note, address=address)
+                            email=email.strip() if email else email, avatar=kwargs.get('avatar'), note=note, address=address)
     db.session.add(hocsinh)
     db.session.add(user)
 
