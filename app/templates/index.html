@@ -17,6 +17,15 @@
         <button class="btn btn-success border" >
             <a href="{{ url_for('register') }}">Create Account</a>
         </button>
+         <button class="btn btn-success border" >
+            <a href="{{ url_for('rule_age') }}">Rule</a>
+        </button>
+        <button class="btn btn-success border" >
+            <a href="{{ url_for('subjects') }}">Rule mon hoc</a>
+        </button>
+        <button class="btn btn-success border" >
+            <a href="{{ url_for('number_rule') }}">Rule si so</a>
+        </button>
         <button class="btn btn-home js-login" type="submit" href="{{ url_for('home') }}">Home</button>
         <button class="btn btn-success border" type="submit">
             <a href="{{url_for('nhanvien_logout') }}">Logout</a>

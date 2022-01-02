@@ -7,22 +7,6 @@
 {% block content %}
 <h1 class="text-center text-success"> THÊM HỌC SINH </h1>
 
-<script>
-        let a = new Date().getFullYear()
-        let input = document.getElementById('birthday').value
-        var inputID = document.getElementById('birthday');
-        var date = new Date(input)
-        inputID.oninvalid = function(event){
-            if (a - date.getFullYear() >= 15) {
-                event.target.setCustomValidity('Do tuoi hop le');
-            }
-            else{
-                event.target.setCustomValidity('tuoi khong hop le');
-            }
-        }
-</script>
-
-
 
 {% if error_msg %}
 <div class="alert alert-danger">

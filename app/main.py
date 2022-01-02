@@ -1,7 +1,8 @@
 import cloudinary.uploader
-from flask import render_template, request, redirect, url_for, session, flash
+from flask import render_template, request, redirect, url_for, session, flash, jsonify
 from flask_login import login_user, logout_user, login_required
 import datetime
+import json
 import utils
 from app.admin import *
 from app.model import UserRole
@@ -12,7 +13,8 @@ from app import login, app
 def home():
     return render_template('login.html')
 
-#login method for employee
+
+# login method for employee
 @app.route('/nhanvien_login', methods=['get', 'post'])
 def nhanvien_login():
     error_msg = ""
@@ -26,6 +28,8 @@ def nhanvien_login():
                 login_user(user=user)
 
                 return render_template('index.html')
+                # next = request.args.get('next', 'home')
+                # return redirect(url_for(next))
             else:
                 error_msg = "Sai tên đăng nhập hoặc mật khẩu!"
 
@@ -33,6 +37,7 @@ def nhanvien_login():
             error_msg = str(ex)
 
     return render_template('login.html', error_msg=error_msg)
+
 
 # Login method for admin, page admin
 @app.route('/admin-login', methods=['post'])
@@ -55,11 +60,13 @@ def admin_login():
 def load_user(user_id):
     return utils.get_user_by_id(user_id=user_id)
 
+
 @app.route('/logout')
 def nhanvien_logout():
     logout_user()
 
     return redirect(url_for('home'))
+
 
 @app.route('/register', methods=['get', 'post'])
 def register():
@@ -86,18 +93,18 @@ def register():
                     if (utils.register(name=name, gender=gender, email=email, birthday=birthday, numbers=numbers,
                                        username=username, password=password, role=role, avatar=avatar_path)):
                         error_msg = "Successful"
-                        return render_template('nhanvien_register.html', error_msg=error_msg)
+                        return redirect(url_for('register', error_msg=error_msg))
                     else:
                         error_msg = "Failed"
-                        return render_template('nhanvien_register.html', error_msg=error_msg)
+                        return redirect(url_for('register', error_msg=error_msg))
                 if role.__eq__('TEACHER'):
                     if (utils.register(name=name, gender=gender, email=email, birthday=birthday, numbers=numbers,
                                        username=username, password=password, role=role, avatar=avatar_path)):
                         error_msg = "Successful"
-                        return render_template('nhanvien_register.html', error_msg=error_msg)
+                        return redirect(url_for('register', error_msg=error_msg))
                     else:
                         error_msg = "Failed"
-                        return render_template('nhanvien_register.html', error_msg=error_msg)
+                        return redirect(url_for('register', error_msg=error_msg))
             else:
                 error_msg = "Password incorrect!!!"
         except Exception as ex:
@@ -105,11 +112,42 @@ def register():
 
     return render_template('nhanvien_register.html', error_msg=error_msg)
 
+
+
+@app.route('/rule_age', methods=['get', 'post'])
+def rule_age():
+    error_msg = ""
+    from_age_valid = 0
+    end_age_valid = 0
+    path = "./data/age.json"
+    res = utils.read_json(path)
+    from_age_valid = res["fromAgeValid"]
+    end_age_valid = res["endAgeValid"]
+    if request.method.__eq__('POST'):
+        try:
+            from_age = request.form['from_age']
+            end_age = request.form['end_age']
+            from_age_valid = int(from_age)
+            end_age_valid = int(end_age)
+            utils.write_json(from_age_valid=from_age_valid, end_age_valid=end_age_valid)
+            error_msg = "Thay đổi hợp lệ"
+            return redirect(url_for('rule_age', error_msg=error_msg))
+        except Exception as ex:
+            error_msg = str(ex)
+
+    return render_template('rule-age.html', error_msg=error_msg, from_age_valid=from_age_valid, end_age_valid=end_age_valid)
+
+
 @app.route('/regiter_hocsinh', methods=['get', 'post'])
 def regiter_hocsinh():
     error_msg = ""
     datetime_object = int((datetime.now()).year)
-
+    from_age_valid = 0
+    end_age_valid = 0
+    path = "./data/age.json"
+    res = utils.read_json(path)
+    from_age_valid = res["fromAgeValid"]
+    end_age_valid = res["endAgeValid"]
     if request.method.__eq__('POST'):
         try:
             IDHocSinh = request.form['IDHocSinh']
@@ -126,28 +164,113 @@ def regiter_hocsinh():
             address = request.form['address']
             avatar_path = None
             do_tuoi = int(birthday[0:4])
-            if (datetime_object - do_tuoi) >= 15 :
+            if from_age_valid <= (datetime_object - do_tuoi) <= end_age_valid:
                 if password.__eq__(confirm):
                     avatar = request.files['avatar']
                     if avatar:
                         res = cloudinary.uploader.upload(avatar)
                         avatar_path = res['secure_url']
-                    if (utils.register_hocsinh(IDHocSinh=IDHocSinh, name=name, gender=gender, email=email, birthday=birthday,
-                                               numbers=numbers, username=username, password=password, avatar=avatar, lop=lop,
-                                                note=note, address=address)):
-                            error_msg = "Successful"
-                            return render_template('hocsinh_register.html', error_msg=error_msg)
+                    if (utils.register_hocsinh(IDHocSinh=IDHocSinh, name=name, gender=gender, email=email,
+                                               birthday=birthday,
+                                               numbers=numbers, username=username, password=password, avatar=avatar,
+                                               lop=lop,
+                                               note=note, address=address)):
+                        error_msg = "Successful"
+                        return redirect(url_for('regiter_hocsinh'))
                     else:
-                            error_msg = "Failed"
-                            return render_template('hocsinh_register.html', error_msg=error_msg)
+                        error_msg = "Failed"
                 else:
                     error_msg = 'Incorrect Password!!!'
             else:
-                error_msg = 'tuoi lol'
+                error_msg = 'Học sinh chưa đủ tuổi'
         except Exception as ex:
             error_msg = str(ex)
 
     return render_template('hocsinh_register.html', error_msg=error_msg, lop=utils.ds_lop())
+
+#si so
+@app.route('/number_rule', methods=['get', 'post'])
+def number_rule():
+    error_msg = ""
+    path = "./data/siso.json"
+    res = utils.read_json_siso(path)
+    maxNumber = res[0]["maxNumber"]
+    IDlop = 1
+    # if _name_ == "_main_":
+    #     file_path = 'test.json'
+    #     file = read_json(file_path)
+    #     result = processing(4, file, 44)
+    #     print(result)
+    if request.method.__eq__("POST"):
+        try:
+            maxNumber_f = request.form['maxNumber']
+            IDlop = request.form['IDlop']
+            maxNumber_int = int(maxNumber_f)
+            id = int(IDlop)
+            if utils.processing(id=id, list_of_dict=res, max_number_t=maxNumber_int):
+                res = utils.read_json(path)
+                maxNumber = res[int(IDlop - 1)]["maxNumber"]
+                error_msg = "Thay đổi thành công"
+                return redirect(url_for('number_rule', error_msg=error_msg, maxNumber=maxNumber))
+            else:
+                error_msg = "Thay đổi không thành công"
+                return redirect(url_for('number_rule', error_msg=error_msg))
+            # res = utils.read_json(path)
+            # maxNumber = res[int(IDlop-1)]["maxNumber"]
+        except Exception as ex:
+            error_msg = str(ex)
+
+    return render_template('siso.html', error_msg=error_msg, lop=utils.ds_lop(), idlop=utils.count_student_lop(IDlop),
+                           maxNumber=maxNumber)
+
+
+# tìm kiếm môn học
+@app.route('/subjects', methods=['get', 'post'])
+def subjects():
+    kw = request.args.get("keyword")
+
+    subjects = utils.Quan_ly_mon_hoc(kw=kw)
+
+    return render_template('mon_hoc.html', subjects=subjects)
+
+
+#xóa môn học
+@app.route('/subjects_remove', methods=['post'])
+def subjects_remove():
+    error_msg = ""
+    if request.method.__eq__('POST'):
+        try:
+            ID_mon_hoc = request.form['IDMonHoc']
+            if utils.xoa_mon(ID_mon_hoc=ID_mon_hoc):
+                error_msg="Xóa môn học thành công"
+                return render_template('mon_hoc.html', error_msg = error_msg)
+            else:
+                error_msg = "Xóa môn học không thành công"
+                return render_template('mon_hoc.html', error_msg=error_msg)
+        except Exception as ex:
+            error_msg = str(ex)
+
+    return render_template('mon_hoc.html', error_msg=error_msg)
+
+#thêm môn học
+@app.route('/subject_add', methods=['get','post'])
+def subject_add():
+    error_msg = ""
+    if request.method.__eq__('POST'):
+        try:
+            TenMH = request.form['TenMH']
+            if utils.them_mon(TenMH=TenMH):
+                error_msg = "Thêm môn học thành công"
+                return render_template('mon_hoc.html', error_msg=error_msg)
+            else:
+                error_msg = "Thêm không thành công"
+                return render_template('mon_hoc.html', error_msg=error_msg)
+        except Exception as ex:
+            error_msg = str(ex)
+
+    return render_template('mon_hoc.html', error_msg=error_msg)
+
+
 
 
 if __name__ == '__main__':

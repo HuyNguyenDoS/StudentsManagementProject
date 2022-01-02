@@ -4,6 +4,11 @@ from flask_login import current_user
 from sqlalchemy import func
 from sqlalchemy.sql import extract
 import hashlib
+import json
+from flask import jsonify
+import sqlite3
+
+conn = sqlite3.connect('studentsmanagement.db')
 
 def general_stats():
     return db.session.query(Lop.IDLop, Lop.TenLop, func.count(HocSinh.IDHocSinh))\
@@ -116,5 +121,96 @@ def register_hocsinh(IDHocSinh, name, gender, email, birthday, numbers, username
     else:
         return True
 
+
+#tim kiem mon hoc
+def Quan_ly_mon_hoc(kw=None):
+    subj = db.session.query(MonHoc.IDMonHoc, MonHoc.TenMH) \
+        .select_from(MonHoc).all()
+
+    if kw:
+        subj = [s for s in subj if s['TenMH'].lower().find(kw.lower()) >= 0]
+
+    return subj
+
+#xoa mon hoc
+def xoa_mon(ID_mon_hoc=None):
+    c =conn.cursor()
+    sql = "delete from monhoc where id=ID_mon_hoc"
+    c.execute(sql)
+    conn.commit()
+    conn.close()
+    # subj = db.session.query(MonHoc.IDMonHoc, MonHoc.TenMH).delete_from(MonHoc).all()
+
+#them mon hoc
+def them_mon(TenMH):
+    monhoc = MonHoc(TenMH=TenMH.strip())
+
+    db.session.add(monhoc)
+
+    try:
+        db.session.commit()
+    except:
+        return False
+    else:
+        return True
+
 def get_user_by_id(user_id):
     return User.query.get(user_id)
+
+def write_json(from_age_valid, end_age_valid):
+    age_json = {
+        "fromAgeValid": from_age_valid,
+        "endAgeValid": end_age_valid
+    }
+    with open("./data/age.json", "w") as file_write:
+        json.dump(age_json, file_write, indent=4)
+    file_write.close()
+
+#đếm học sinh của lớp có id
+def count_student_lop(id=1):
+    idlop = db.session.query(Lop.TenLop, func.count(Lop.IDLop)) \
+        .join(HocSinh, Lop.IDLop.__eq__(HocSinh.IDLop), isouter=True)
+
+    if id:
+        idlop = idlop.filter(HocSinh.IDLop.__eq__(id))
+
+    return idlop.group_by(HocSinh.IDLop).all()
+
+# def write_json_siso(id, maxNumber):
+def read_json_siso(file_path):
+    try:
+        with open(file_path, 'rb') as myfile:
+            data = myfile.read()
+        contracts = json.loads(data)
+    except:
+        print("Some thing went wrong!")
+
+    return contracts
+
+def processing(id, list_of_dict, max_number_t):
+    siso_json = {
+        "id": id,
+        "maxNumber": max_number_t
+    }
+    for dict in list_of_dict:
+        if dict['id'] == id :
+            # result = dict.get('maxNumber')
+            try:
+                with open("./data/age.json", "w+") as file_write:
+                    json.dump(siso_json, file_write, indent=4)
+                file_write.close()
+            except:
+                print("Some thing went wrong!")
+        else:
+            result = max_number_t
+    return result
+
+
+
+def read_json(path):
+    with open(path) as f:
+        return json.loads(f.read())
+# path : "./data/age.json"
+
+
+
