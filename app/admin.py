@@ -48,10 +48,7 @@ class StatsViewDiem(AuthenticatedBaseView):
 class XuatViewDiem(AuthenticatedBaseView):
     @expose('/')
     def index(self):
-        ten_lop = request.args.get('ten_lop')
-        ki_hoc = request.args.get('ki_hoc')
         nam_hoc = request.args.get('nam_hoc')
-        mon_hoc = request.args.get('mon_hoc')
 
         return self.render('admin/diem_stats.html',
                            stats=utils.Diem_all(nam_hoc=nam_hoc))

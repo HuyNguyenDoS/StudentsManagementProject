@@ -11,25 +11,49 @@
       <div class="collapse navbar-collapse mgl-5" id="collapsibleNavbar">
             <a class="ou" href="#">OU SCHOOL</a>
       </div>
-         <button class="btn btn-success border" >
-            <a href="{{ url_for('regiter_hocsinh') }}">Add Student</a>
-        </button>
-        <button class="btn btn-success border" >
-            <a href="{{ url_for('register') }}">Create Account</a>
-        </button>
-         <button class="btn btn-success border" >
-            <a href="{{ url_for('rule_age') }}">Rule</a>
-        </button>
-        <button class="btn btn-success border" >
-            <a href="{{ url_for('subjects') }}">Rule mon hoc</a>
-        </button>
-        <button class="btn btn-success border" >
-            <a href="{{ url_for('number_rule') }}">Rule si so</a>
-        </button>
-        <button class="btn btn-home js-login" type="submit" href="{{ url_for('home') }}">Home</button>
-        <button class="btn btn-success border" type="submit">
-            <a href="{{url_for('nhanvien_logout') }}">Logout</a>
-        </button>
+
+
+       <div class="dropdown" style="margin-right: 10px">
+          <a href="{{ url_for('register') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ url_for('rule_age') }}">
+                 <button class="btn btn-success border" >
+                        Change in Age
+                 </button>
+              </a>
+              </li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ url_for('number_rule') }}">
+                 <button class="btn btn-success border" >
+                   Rule si so
+                </button>
+              </a>
+              </li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ url_for('subjects') }}">
+                 <button class="btn btn-success border" >
+               Rule mon hoc
+                </button>
+              </a>
+              </li>
+          </ul>
+      </div>
+
+        <div class="dropdown" style="margin-right: 10px">
+          <a href="{{ url_for('register') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Create <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ url_for('register') }}">
+                <button class="btn btn-success border" >
+                Create Account
+            </button>
+              </a>
+              </li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ url_for('regiter_hocsinh') }}">
+                    <button class="btn btn-success border" >
+                   Add Student
+                </button></a>
+              </li>
+          </ul>
+      </div>
+
     </nav>
 
 

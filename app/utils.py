@@ -68,7 +68,7 @@ def Diem_all(nam_hoc=None):
         .join(KyHoc, KyHoc.IDKyHoc.__eq__(Diem.IDKyHoc)) \
         .join(MonHoc, MonHoc.IDMonHoc.__eq__(Diem.IDMonhoc))
     if nam_hoc:
-        q =q.filter(KyHoc.NamHoc.__eq__(nam_hoc))
+        q = q.filter(KyHoc.NamHoc.__eq__(nam_hoc))
 
     return q.group_by(Lop.TenLop, KyHoc.name, KyHoc.NamHoc, Diem.DiemTB).all()
 
@@ -188,22 +188,16 @@ def read_json_siso(file_path):
     return contracts
 
 def processing(id, list_of_dict, max_number_t):
-    siso_json = {
-        "id": id,
-        "maxNumber": max_number_t
-    }
-    for dict in list_of_dict:
-        if dict['id'] == id :
-            # result = dict.get('maxNumber')
-            try:
-                with open("./data/age.json", "w+") as file_write:
-                    json.dump(siso_json, file_write, indent=4)
-                file_write.close()
-            except:
-                print("Some thing went wrong!")
-        else:
-            result = max_number_t
-    return result
+    ids = [dict['id'] for dict in list_of_dict]
+    max_nums = [dict['maxNumber'] for dict in list_of_dict]
+    if id not in ids:
+        new_dict = {
+            'id': id,
+            'maxNumber': max_number_t
+        }
+        list_of_dict.append(new_dict)
+
+    return list_of_dict
 
 
 

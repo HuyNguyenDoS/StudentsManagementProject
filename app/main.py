@@ -11,7 +11,7 @@ from app import login, app
 
 @app.route("/")
 def home():
-    return render_template('login.html')
+    return render_template('index.html')
 
 
 # login method for employee
@@ -194,34 +194,27 @@ def number_rule():
     error_msg = ""
     path = "./data/siso.json"
     res = utils.read_json_siso(path)
-    maxNumber = res[0]["maxNumber"]
+    id = 1
     IDlop = 1
-    # if _name_ == "_main_":
-    #     file_path = 'test.json'
-    #     file = read_json(file_path)
-    #     result = processing(4, file, 44)
-    #     print(result)
     if request.method.__eq__("POST"):
         try:
             maxNumber_f = request.form['maxNumber']
             IDlop = request.form['IDlop']
-            maxNumber_int = int(maxNumber_f)
             id = int(IDlop)
-            if utils.processing(id=id, list_of_dict=res, max_number_t=maxNumber_int):
-                res = utils.read_json(path)
-                maxNumber = res[int(IDlop - 1)]["maxNumber"]
-                error_msg = "Thay đổi thành công"
-                return redirect(url_for('number_rule', error_msg=error_msg, maxNumber=maxNumber))
-            else:
-                error_msg = "Thay đổi không thành công"
-                return redirect(url_for('number_rule', error_msg=error_msg))
-            # res = utils.read_json(path)
-            # maxNumber = res[int(IDlop-1)]["maxNumber"]
+            maxNumber_int = int(maxNumber_f)
+            list_of_dict = utils.processing(id, res, maxNumber_int)
+            with open(path, 'w') as fp:
+                json.dumps(list_of_dict, fp, indent=4)
+            error_msg = "Thay đổi thành công"
+            return redirect(url_for('number_rule', error_msg=error_msg, maxNumber=maxNumber))
+            # else:
+            #     error_msg = "Thay đổi không thành công"
+            #     return redirect(url_for('number_rule', error_msg=error_msg))
         except Exception as ex:
-            error_msg = str(ex)
+            error_msg = ""
 
     return render_template('siso.html', error_msg=error_msg, lop=utils.ds_lop(), idlop=utils.count_student_lop(IDlop),
-                           maxNumber=maxNumber)
+                           maxNumber=res[id-1]["maxNumber"])
 
 
 # tìm kiếm môn học
@@ -270,7 +263,25 @@ def subject_add():
 
     return render_template('mon_hoc.html', error_msg=error_msg)
 
+#xuất điểm
+@app.route('/diem_all', methods=['get', 'post'])
+def diem_all():
+    nam_hoc = '2020'
+    error_msg = ""
+    if request.method.__eq__('POST'):
+        try:
+            nam_hoc = request.form['nam_hoc']
+            if utils.Diem_all(nam_hoc=nam_hoc):
+                stats = utils.Diem_all(nam_hoc=nam_hoc)
+                error_msg = "thành công"
+                return render_template('xuatdiem_register.html', stats, error_msg)
+            else:
+                error_msg = "Some thing went wrong!!"
+        except Exception as ex:
+            error_msg = str(ex)
 
+    return render_template('xuatdiem_register.html',
+                       stats=utils.Diem_all(nam_hoc=nam_hoc), error_msg=error_msg)
 
 
 if __name__ == '__main__':

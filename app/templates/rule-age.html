@@ -1,6 +1,12 @@
 {% extends 'layout/base.html' %}
 
-
+{% block header %}
+<div class="pagestudent">
+     <button class="btn btn-success border" type="submit">
+            <a class="btnlogout " href="{{url_for('home') }}">Home</a>
+     </button>
+</div>
+{%  endblock %}
 
 {% block content %}
 

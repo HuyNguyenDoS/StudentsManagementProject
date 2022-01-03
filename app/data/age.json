@@ -1,4 +1,4 @@
 {
-    "id": 1,
-    "maxNumber": 411
+    "fromAgeValid": 15,
+    "endAgeValid": 20
 }
